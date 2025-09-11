@@ -6,6 +6,7 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -26,3 +27,37 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    
+    - name: Publish API
+      if: startsWith(github.ref, 'refs/tags/')
+      run: dotnet publish LicenseGate.API/LicenseGate.API.csproj -c Release -o ./publish
+    
+    - name: Create ZIP archive
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        cd publish
+        zip -r ../licensegate-api-${{ github.ref_name }}.zip .
+        cd ..
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./licensegate-api-${{ github.ref_name }}.zip
+        asset_name: licensegate-api-${{ github.ref_name }}.zip
+        asset_content_type: application/zip
