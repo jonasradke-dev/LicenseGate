@@ -31,7 +31,7 @@ public class LicenseController : ControllerBase
             return Ok(new ValidateLicenseResponse
             {
                 Success = true,
-                Message = result.message,
+                Message = result.Message,
                 ExpiresAt = result.ExpiresAt,
             });
         }
@@ -39,7 +39,7 @@ public class LicenseController : ControllerBase
         return BadRequest(new ValidateLicenseResponse
         {
             Success = false,
-            Message = result.message
+            Message = result.Message
         });
     }
     

@@ -15,7 +15,7 @@ public class LicenseRepository : ILicenseRepository
     }
 
 
-    public async Task<License?> GetKeyByAsync(string licenseKey, CancellationToken cancellationToken = default)
+    public async Task<License?> GetByKeyAsync(string licenseKey, CancellationToken cancellationToken = default)
     {
         return await _context.Licenses
             .FirstOrDefaultAsync(l=>l.LicenseKey == licenseKey, cancellationToken);

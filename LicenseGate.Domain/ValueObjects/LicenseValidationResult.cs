@@ -3,13 +3,13 @@ namespace LicenseGate.Domain.ValueObjects;
 public class LicenseValidationResult
 {
     public bool IsValid { get; private set; }
-    public string message { get; private set; }
+    public string Message { get; private set; }
     public DateTime? ExpiresAt { get; private set; }
 
     private LicenseValidationResult(bool isValid, string message, DateTime? expiresAt = null)
     {
         IsValid = isValid;
-        this.message = message;
+        this.Message = message;
         ExpiresAt = expiresAt;
     }
     

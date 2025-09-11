@@ -22,7 +22,7 @@ public class ValidateLicenseHandler : IRequestHandler<ValidateLicenseCommand, Li
         if (string.IsNullOrWhiteSpace(request.DeviceFingerprint))
             return LicenseValidationResult.Failure("Device fingerprint is required");
 
-        var license = await _licenseRepository.GetKeyByAsync(request.LicenseKey, cancellationToken);
+        var license = await _licenseRepository.GetByKeyAsync(request.LicenseKey, cancellationToken);
         if(license is null)
             return LicenseValidationResult.Failure("License not found");
         
