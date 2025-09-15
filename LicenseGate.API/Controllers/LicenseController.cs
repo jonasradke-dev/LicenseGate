@@ -3,6 +3,7 @@ using System.Text;
 using LicenseGate.API.Models;
 using LicenseGate.Application.Command;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LicenseGate.API.Controllers;
@@ -43,6 +44,7 @@ public class LicenseController : ControllerBase
         });
     }
     
+    [Authorize(Roles = "Admin")]
     [HttpPost("create")]
     public async Task<IActionResult> CreateLicense([FromBody] CreateLicenseRequest request)
     {
